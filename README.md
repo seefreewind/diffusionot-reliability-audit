@@ -1,5 +1,9 @@
 # DiffusionOT reliability audit
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23160518.svg)](https://doi.org/10.5281/zenodo.23160518)
+
+Version 1.0.0 archive: https://doi.org/10.5281/zenodo.23160518 . The immutable archive corresponds to release commit `2ada777`; later citation-metadata updates on the default branch do not alter the archived scientific files.
+
 Frozen aggregate data, author-written computational code and figure regeneration sources for a pre-lineage reliability audit of a stochastic optimal-transport implementation in single-cell hematopoiesis.
 
 ## Reproduce the four main figures
