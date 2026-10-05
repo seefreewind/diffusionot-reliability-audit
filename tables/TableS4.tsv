@@ -1,0 +1,5 @@
+Check	Out-of-support fraction	Expected behavior	Result
+Target self-comparison	0%	In support	PASS
+Held-out same synthetic target	0%	In support	PASS
+Distant synthetic points	100%	Out of support	PASS
+Reproduction of frozen rates	Exact for all five seeds and both intervals	Match frozen result	PASS

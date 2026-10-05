@@ -1,0 +1,11 @@
+true_state	Monocyte	Neutrophil	Basophil	Megakaryocyte	Mast	Erythroid	Eosinophil	Lymphoid	Other/Unresolved	Undifferentiated/Unresolved progenitor
+Monocyte	10277	72	0	0	0	0	0	0	0	378
+Neutrophil	22	12272	0	0	0	0	0	0	0	2154
+Basophil	0	22	6399	0	19	0	0	0	0	281
+Megakaryocyte	2	1	1	1097	8	0	0	1	1	256
+Mast	0	14	269	0	1576	0	0	0	0	106
+Erythroid	1	1	1	25	3	0	0	0	0	402
+Eosinophil	0	38	220	0	0	0	0	0	0	93
+Lymphoid	1	0	0	0	0	0	0	18	3	108
+Other/Unresolved	57	1	0	0	0	0	0	1	31	17
+Undifferentiated/Unresolved progenitor	1130	1520	359	139	168	0	0	6	27	14542

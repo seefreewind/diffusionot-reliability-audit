@@ -1,0 +1,6 @@
+Seed	Initial 10k runs converged / 3	Bounded confirmation
+11	3/3	Not required
+23	3/3	Not required
+47	3/3	Not required
+71	2/3	Converged at 20k
+101	0/3	Converged on 10k grid within 20k run

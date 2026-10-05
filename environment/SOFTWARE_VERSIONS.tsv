@@ -1,0 +1,31 @@
+component	version_or_commit	role	environment	source_or_note
+Operating system	macOS 26.4 (Build 25E246); Darwin 25.4.0	Host OS	Analysis host	Recorded in reports/SOFTWARE_VERSIONS.md
+Architecture	arm64	Host architecture	Analysis host	Recorded in reports/SOFTWARE_VERSIONS.md
+CPU / RAM	10 physical cores / 16 GiB	Compute resources	Analysis host	CPU-only execution
+Python	CPython 3.10.20	Core reimplementation	DiffusionOT isolated runtime	Frozen software report
+PyTorch	1.13.1	Core reimplementation	DiffusionOT isolated runtime	Frozen software report
+NumPy	1.26.4	Core reimplementation	DiffusionOT isolated runtime	Frozen software report
+SciPy	1.10.1	Core reimplementation	DiffusionOT isolated runtime	Frozen software report
+pandas	1.5.3	Core reimplementation	DiffusionOT isolated runtime	Frozen software report
+Scanpy	1.11.2	Single-cell data handling	DiffusionOT isolated runtime	Compatibility-adjusted runtime
+scikit-learn	1.2.2	Classifier and diagnostics	DiffusionOT isolated runtime	Frozen software report
+TorchDiffEqPack distribution	1.0.1	ODE/SDE utilities	DiffusionOT isolated runtime	Distribution metadata
+TorchDiffEqPack module	0.1.0	ODE/SDE utilities	DiffusionOT isolated runtime	Imported module __version__; differs from distribution metadata
+torchdiffeq	0.2.3	ODE integration	DiffusionOT isolated runtime	Frozen software report
+Matplotlib	3.8.4	Analysis plotting	DiffusionOT isolated runtime	Frozen software report
+seaborn	0.13.2	Analysis plotting	DiffusionOT isolated runtime	Frozen software report
+DiffusionOT	bb3c5bd0c18066e90929961e92b79ffd9abb5e86	Audited model source	Frozen project checkout	https://github.com/liujuntan/DiffusionOT
+LARRY data repository	3966ea5ee85057a4bb9b19e6f2e21d95ee5304be	Source data/preprocessing provenance	Frozen project record	Commit recorded in earlier project manifest; verify against final release archive
+GEO accession	GSE140802	Public source dataset	NCBI GEO	LARRY in-vitro source data
+Python	3.11.15	Comparator runtime	Phase 2R-E ENV_B	Frozen clean-room verdict
+moscot	0.5.2	Comparator technical preflight	Phase 2R-E ENV_B	Frozen clean-room verdict
+JAX	0.10.2	Comparator technical preflight	Phase 2R-E ENV_B	Frozen clean-room verdict
+JAXLIB	0.10.2	Comparator technical preflight	Phase 2R-E ENV_B	Frozen clean-room verdict
+OTT-JAX	0.6.0	Comparator technical preflight	Phase 2R-E ENV_B	Frozen clean-room verdict
+Numba	0.67.0	Comparator technical preflight	Phase 2R-E ENV_B	Frozen clean-room verdict
+PyArrow	19.0.1	Frozen Parquet input I/O	Phase 2R-E ENV_B	Added only for reading frozen input
+WOT	1.0.8.post2; commit 230afdb4b4d0c462393f49cce679ede28264c677	Comparator source	Phase 2R-E pinned source	Not executed; POT dependency absent
+POT / ot	Not installed in ENV_A or ENV_B	WOT dependency gate	Phase 2R-E	WOT panel path could not start
+TIGON	Version not frozen in this project	Method compatibility gate	Phase 2R-E	METHOD_INCOMPATIBLE
+Pandoc	3.11	Manuscript DOCX/LaTeX assembly	User Homebrew /opt/homebrew/Cellar/pandoc/3.11	Installed for manuscript artifact generation
+Python (Codex bundled)	3.12 runtime	Figure/document processing	bundled Python 3.12 runtime	Matplotlib 3.11.0; NumPy 2.3.5; python-docx 1.2.0

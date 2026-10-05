@@ -1,0 +1,72 @@
+phase: PHASE1R-S
+title: Blinded model-validity salvage
+frozen_at_local: 2026-09-28 Asia/Shanghai
+status: FROZEN_BEFORE_DIAGNOSTICS
+lineage_lock:
+  status: LOCKED
+  clone_or_fate_ground_truth_opened: false
+  permitted_inputs: [Phase 1R checkpoints, non-lineage expression/metadata, frozen Phase 1R outputs, frozen classifier and scripts]
+  prohibited_inputs: [clone IDs, lineage barcodes, fate assignments, clonal fate composition, fate entropy, descendant information]
+models:
+  seeds: [11, 23, 47, 71, 101]
+  checkpoint_policy: frozen-checkpoint inference only; no AE or RUOT retraining
+  scientific_specification_changes: prohibited
+time_axis:
+  observed_day_to_model_time: {2: 0.0, 4: 1.0, 6: 2.0}
+  adjacent_intervals: [[2, 4, 0.0, 1.0], [4, 6, 1.0, 2.0]]
+  frozen_qc_integrator: explicit Euler-Maruyama, baseline_dt: 0.01
+  solver_sensitivity_steps: [0.01, 0.005, 0.0025]
+  stochastic_coupling: common Brownian path; fine increments summed to form coarser increments
+  source_sample: Phase 1R stratified 10000 rows per source timepoint, seed 6047
+support_gate:
+  metric: Euclidean nearest empirical-target distance divided by the empirical target cloud leave-one-out 30-nearest-neighbor distance 99th percentile threshold
+  threshold_fraction: 0.05
+  implementation_change: prohibited unless a reproducible implementation defect is demonstrated
+  synthetic_cases: [target_self, held_out_same_distribution_target, distant_synthetic_cloud]
+solver_and_diffusion:
+  inferential_model: full SDE with each frozen learned shared diffusion coefficient
+  diagnostic_only: deterministic drift-only d=0; never a replacement model
+  compare: [dt, dt/2, dt/4]
+  preserve: [checkpoints, initial cells, trajectory seeds, time intervals, target cells, metrics]
+  report: [endpoint displacement, support fraction, debiased Sinkhorn, Gaussian MMD, runtime, finite status]
+  diffusion_scale: theoretical RMS sqrt(2*d*Delta_t*D), compared with empirical NN/support radii and observed source-target displacement
+score_audit:
+  inspect: [raw score network outputs, saved score arrays, score contribution in SDE, dtype, checkpoint loading, score losses and gradients if saved]
+  no_threshold_change: true
+seed_stability:
+  aligned_cell_ids: canonical Phase 1R IDs; no lineage grouping
+  metrics: [pairwise_distance_spearman, trustworthiness, neighborhood_jaccard, mutual_knn_overlap, local_rank_correlation]
+  k_values: [10, 30, 50]
+  reference_seed: 11
+  self_neighbor_excluded: true
+velocity_growth:
+  velocity: [raw_cellwise_cosine, per_timepoint_cosine, velocity_norm_spearman, local_neighborhood_averaged_cosine]
+  growth: [raw_spearman, rank_spearman, time_stratified_spearman, local_neighborhood_averaged_spearman, correlations_with_library_size_latent_norm_timepoint]
+  lineage_stratification: prohibited
+sta:
+  classifier: frozen Phase 1R grouped-OOF classifier and final mapper; no replacement or retraining
+  fixed_audit_cells_per_day: 100
+  trajectory_count: 10000
+  independent_replicates_per_seed: 3
+  unstable_seed_confirmation: {seeds: [71, 101], trajectories: 20000, runs_per_seed: 1}
+  convergence: frozen Phase 1R maximum probability and normalized entropy deltas <0.01 between adjacent checkpoints
+  report: [replicate_probability_sd, replicate_entropy_sd, endpoint_distribution_distance, within_model_vs_between_seed_variance]
+  true_clone_fate: prohibited
+classifier_audit:
+  per_class: [prevalence, precision, recall, f1]
+  report: [pooled_oof_confusion_matrix, macro_f1, probability_calibration_if_available]
+  weak_class_rule: f1 < 0.30
+change_classes:
+  T1: implementation correction following frozen specification; only after explicit defect evidence
+  T2: numerical precision correction with unchanged model definition
+  S: scientific model change prohibited
+salvage_gate:
+  support_each_interval: at_least_4_of_5_seeds_at_or_below_0.05
+  sinkhorn_and_mmd: at_least_4_of_5_seeds_better_than_each_frozen_null
+  sta: at_least_4_of_5_seeds_converged
+  velocity_cosine_median_min: 0.70
+  velocity_norm_spearman_min: 0.60
+  latent_distance_spearman_min: 0.60
+  verified_neighborhood_overlap_min: greater_than_zero
+  all_finite_and_no_indexing_or_solver_divergence: true
+  lineage_unblinding_authorized_only_on_pass: true

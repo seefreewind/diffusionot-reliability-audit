@@ -1,0 +1,7 @@
+Transition	dt	Seeds passing support / 5	Seeds better than both nulls: Sinkhorn / MMD
+2→4	0.0100	5/5	5/5; 5/5
+2→4	0.0050	5/5	5/5; 5/5
+2→4	0.0025	5/5	5/5; 5/5
+4→6	0.0100	0/5	5/5; 5/5
+4→6	0.0050	0/5	5/5; 5/5
+4→6	0.0025	0/5	5/5; 5/5

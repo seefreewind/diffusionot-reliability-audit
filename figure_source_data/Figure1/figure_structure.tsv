@@ -1,0 +1,15 @@
+panel	display_text
+A	Identity provenance
+A	Population/support validity
+A	Numerical & refit stability
+A	STOP: Admission criteria unmet
+A	External lineage validation
+A	Direct lineage outcomes not evaluated
+B	Canonical LARRY cohort: 130,887 cells
+B	Published artifact: 43,968 rows
+B	Deterministic mapping unavailable
+B	Planned clone-level validation unavailable
+B	ID-preserving reimplementation: 130,887 cells
+B	Canonical identities retained
+B	Pre-lineage reliability audit
+B	Row counts do not establish a subset relationship.

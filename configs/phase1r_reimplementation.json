@@ -1,0 +1,66 @@
+{
+  "arm": "REIMPLEMENTED_ID_PRESERVING_ARM",
+  "label": "independent DiffusionOT-like reimplementation; not an exact reproduction of the published mouse experiment",
+  "source": {
+    "larry_repository_commit": "3966ea5ee85057a4bb9b19e6f2e21d95ee5304be",
+    "expression": "data/model_visible/phase1r_source/stateFate_inVitro_normed_counts.mtx.gz",
+    "metadata": "data/model_visible/phase1r_source/stateFate_inVitro_metadata.txt.gz",
+    "genes": "data/model_visible/phase1r_source/stateFate_inVitro_gene_names.txt.gz",
+    "allowed_non_lineage_inputs_only": true,
+    "clone_assignment_input": null
+  },
+  "row_policy": {
+    "cells": "retain all source rows in canonical order; no cell filtering because the published rare-type threshold and exact 43,968-row selection are unavailable",
+    "original_cell_id": "Library + '|' + Cell barcode",
+    "save_original_row_index": true,
+    "ids_in_model_features": false,
+    "clone_assignments_or_fates_visible": false
+  },
+  "expression_preprocessing": {
+    "input_matrix": "Klein Lab normed_counts as distributed; verify cell x gene orientation against metadata and gene names",
+    "gene_detection_filter": "retain genes nonzero in at least ceil(0.01 * n_cells) cells",
+    "transform": "log1p on the distributed normalized expression values",
+    "feature_selection": "Scanpy highly_variable_genes(flavor='seurat', n_top_genes=3000, batch_key=None, subset=False), then preserve returned source gene order",
+    "cell_type_filter": "none; retain all source annotations because the published cutoff is unspecified",
+    "scaling_after_log1p": "none; published notebook's NPZ-writing cell has no explicit scaling call"
+  },
+  "autoencoder": {
+    "architecture_source": "external/DiffusionOT/AE/models.py::AutoEncoder",
+    "n_latent": 2,
+    "n_hidden": 300,
+    "n_layers": 1,
+    "activation": "relu",
+    "dropout": 0.2,
+    "batch_norm": true,
+    "test_size": 0.1,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "max_epochs": 500,
+    "early_stopping_patient": 30,
+    "early_stopping_tolerance": 0.001,
+    "device": "cpu",
+    "seeds": [11, 23, 47, 71, 101]
+  },
+  "diffusionot": {
+    "architecture_source": "external/DiffusionOT/utility.py::RUOT",
+    "time_labels": [2, 4, 6],
+    "integral_time": [0, 1, 2],
+    "niters": 5000,
+    "learning_rate": 0.003,
+    "num_samples": 100,
+    "hidden_dim": 16,
+    "n_hiddens": 4,
+    "activation": "Tanh",
+    "diffusion_initial": 0.001,
+    "optimizer": "Adam(weight_decay=0.01)",
+    "solver": "Dopri5(rtol=0.001, atol=0.00001)",
+    "seeds": [11, 23, 47, 71, 101]
+  },
+  "important_deviations_from_published_run": [
+    "Exact published cell subset and cell-type exclusion threshold are unavailable; retain all 130887 source cells.",
+    "Exact HVG algorithm and feature order are unavailable; use Scanpy 1.11.2 flavor='seurat' and preserve its selected features in source order.",
+    "The public notebook does not show a scaler in its NPZ-writing cell; no separate scaler is applied.",
+    "This arm is reported separately from the frozen published-checkpoint arm and must not be called an exact reproduction."
+  ]
+}

@@ -1,0 +1,7 @@
+Method/path	Frozen technical check	Result	Eligible for ranking?
+DiffusionOT	Phase 1R-S model admission	4→6 support failed all seeds and step sizes	No
+TIGON	Method compatibility	Native bridge incompatible with the frozen estimand	No
+moscot	ENV_B imports and synthetic solver	Passed	Not sufficient by itself
+moscot	Selected 2k day-2→day-4 real-data preflight	converged=false; stop at frozen gate	No
+WOT	POT ot present in approved runtimes	Missing in ENV_A and ENV_B	No
+Overall extension	Prespecified eligibility and stopping rule	No eligible comparison completed	No method eligible; no ranking

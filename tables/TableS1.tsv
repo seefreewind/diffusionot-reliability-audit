@@ -1,0 +1,15 @@
+Quantity	Value
+Canonical cells	130,887
+Genes	25,289
+Day 2 cells / model time	28,249 / 0
+Day 4 cells / model time	48,498 / 1
+Day 6 cells / model time	54,140 / 2
+AE seeds completed	5/5
+RUOT seeds completed	5/5
+Cell-ID integrity	130,887/130,887 PASS
+Published-artifact status	PUBLICATION_MAPPING_UNRECOVERABLE_REIMPLEMENT
+Reimplementation admission	MODEL_VALIDITY_NO_GO_FOR_LINEAGE_INFERENCE
+Cross-method extension	TECHNICAL_NO_GO_PHASE2R_E
+Lineage-file access	LINEAGE_FILES_NEVER_OPENED
+Aggregate-information exposure	PARTIAL_INFORMATION_BLINDING_COMPROMISED
+TIGON compatibility	METHOD_INCOMPATIBLE

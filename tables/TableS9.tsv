@@ -1,0 +1,7 @@
+Diagnostic	Frozen result	Interpretation limit
+Final checkpoint score norm	1.23×10−41 to 3.65×10−40	Applies to five audited final checkpoints
+Pretraining checkpoint score norm	0.69–0.94	Pretraining snapshots only
+Float32 score gradient	Underflowed to zero after fitting	No generalization to other models or training runs
+Frozen sampler score drift	Not used; sampler uses drift and diffusion terms	Score collapse not asserted as cause of support failure
+Grouped OOF terminal-classifier macro-F1	0.478–0.578	Terminal taxonomy only; not lineage prediction
+Seed-by-class values below F1=0.30	19	Five listed terminal classes; no taxonomy replacement

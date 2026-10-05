@@ -1,0 +1,6 @@
+Seed	Drift-only d=0 (%)	Full SDE (%)	Full SDE minus drift-only (percentage points)
+11	19.13	18.94	−0.19
+23	10.65	10.57	−0.08
+47	11.55	12.12	0.57
+71	15.22	15.54	0.32
+101	12.57	13.02	0.45

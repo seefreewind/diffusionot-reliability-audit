@@ -1,0 +1,5 @@
+Observed evidence	Supported interpretation	Not supported
+Published artifact could not be deterministically mapped to canonical cell IDs	Planned external clone-level validation was unavailable	Published biological conclusions are incorrect
+All seeds passed 2→4 and failed 4→6 support under tested dt values	Reimplementation failed the prespecified late-transition admission gate	Lineage prediction is incorrect or all trajectory models will fail
+Between-fit classifier-derived probability variation greatly exceeded within-fit MC variation	More Monte Carlo draws alone cannot address measured refit variability	The same variance hierarchy applies to other models or datasets
+Direct cell-level lineage outcomes were not evaluated	Lineage accuracy remains unknown	Any quantitative claim about lineage accuracy

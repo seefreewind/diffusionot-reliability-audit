@@ -1,0 +1,402 @@
+protocol_version: 1
+freeze_status: PRE_LINEAGE_UNBLIND
+freeze_timestamp_local: 2026-09-27T19:40:00+08:00
+qc_protocol_amendment_timestamp_local: 2026-09-27T20:17:07+08:00
+arm: ID_PRESERVING_REIMPLEMENTATION
+published_arm_status: PUBLISHED_ARTIFACT_REPRODUCIBILITY_ONLY
+exact_published_mouse_reproduction: false
+
+dataset:
+  name: LARRY_in_vitro
+  repository: https://github.com/scDiffEq/LARRY-dataset
+  repository_commit: 3966ea5ee85057a4bb9b19e6f2e21d95ee5304be
+  public_documentation: https://github.com/scDiffEq/LARRY-dataset
+  expected_dimensions_cells_genes: [130887, 25289]
+  files:
+    expression:
+      path: data/model_visible/phase1r_source/stateFate_inVitro_normed_counts.mtx.gz
+      layer: normed_counts
+      orientation: cells_by_genes
+      sha256: afb42ce438e271aec07819a02d46cfc1e6157c0527f18f45911c7386c3c8b45e
+    metadata:
+      path: data/model_visible/phase1r_source/stateFate_inVitro_metadata.txt.gz
+      sha256: c88e02cc512205e7033e28bf512f5d0dd43b98ba547fdd4a196b4bd9b62d7c07
+    gene_names:
+      path: data/model_visible/phase1r_source/stateFate_inVitro_gene_names.txt.gz
+      sha256: 5672e137bcac196851b8dc44311b40fe61c428d6fd726dfae320b3fe5ddfffcd
+  row_order: source metadata and expression-matrix row order; no cell filtering
+  cell_id: Library + '|' + Cell barcode
+  cell_id_order_artifact:
+    path: results/phase1R/REIMPLEMENTED_ID_PRESERVING_ARM/cell_index.tsv
+    sha256: df812659984b954cb4c6896a7e57d7d817a0edf09111bd7d4cc9bb18083d8226
+  source_timepoints: [2, 4, 6]
+  source_timepoint_counts: {2: 28249, 4: 48498, 6: 54140}
+  model_visible_columns:
+    - Library
+    - Cell barcode
+    - Time point
+    - Starting population
+    - Cell type annotation
+    - Well
+    - SPRING-x
+    - SPRING-y
+  clone_or_fate_fields_visible: false
+
+preprocessing:
+  expression_layer: distributed normed_counts values
+  gene_universe_source_count: 25289
+  gene_detection_filter: nonzero in at least ceil(0.01 * 130887) = 1309 cells
+  genes_after_detection_filter: 9864
+  transform: log1p
+  feature_selection:
+    tool: Scanpy 1.11.2
+    function: highly_variable_genes
+    flavor: seurat
+    n_top_genes: 3000
+    batch_key: null
+    order: selected features retained in original source-gene order
+  scaling_after_log1p: none
+  output_expression:
+    path: results/phase1R/REIMPLEMENTED_ID_PRESERVING_ARM/expression_log1p_top3000.npy
+    sha256: 899b8e2740efd7f01ad50ab99fb046d6dbb73493a469d23f10fcaccca3190a57
+  selected_gene_order:
+    path: results/phase1R/REIMPLEMENTED_ID_PRESERVING_ARM/selected_genes.tsv
+    sha256: 5585d89706fb5cae38dce7611bb642fa7ae34113d77917e6c33f01d4f244f9f6
+
+autoencoder:
+  implementation: external/DiffusionOT/AE/models.py::AutoEncoder
+  training_script: scripts/phase1r_reimplementation.py
+  training_script_sha256: 3d73e4bedf3f6cbe120f25b33349a507d3a08b25f9605587e2f48214140d6d62
+  latent_dimension: 2
+  hidden_width: 300
+  hidden_layers: 1
+  activation: ReLU
+  dropout: 0.2
+  batch_normalization: true
+  optimizer: Adam
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  batch_size: 128
+  validation_fraction: 0.1
+  max_epochs: 500
+  early_stopping_patience: 30
+  early_stopping_minimum_improvement: 0.001
+  device: CPU
+  seed_split: same numeric seed as paired RUOT run
+  seeds: [11, 23, 47, 71, 101]
+
+diffusionot:
+  implementation: external/DiffusionOT/utility.py::RUOT
+  upstream_repository_commit: bb3c5bd0c18066e90929961e92b79ffd9abb5e86
+  training_script: scripts/phase1r_reimplementation.py
+  training_script_sha256: 3d73e4bedf3f6cbe120f25b33349a507d3a08b25f9605587e2f48214140d6d62
+  seeds: [11, 23, 47, 71, 101]
+  pairing:
+    - {ae_seed: 11, ruot_seed: 11}
+    - {ae_seed: 23, ruot_seed: 23}
+    - {ae_seed: 47, ruot_seed: 47}
+    - {ae_seed: 71, ruot_seed: 71}
+    - {ae_seed: 101, ruot_seed: 101}
+  observed_time_labels: [2, 4, 6]
+  integral_time_scaling: {2: 0.0, 4: 1.0, 6: 2.0}
+  architecture:
+    state_dimension: 2
+    hidden_width: 16
+    hidden_layers: 4
+    activation: Tanh
+  score_pretraining_iterations: 200
+  velocity_growth_pretraining_iterations: 100
+  full_loss_iterations: 5000
+  samples_per_iteration_and_transition: 100
+  initial_diffusion: 0.001
+  optimizer: Adam
+  learning_rate: 0.003
+  weight_decay: 0.01
+  ode_solver:
+    method: Dopri5
+    relative_tolerance: 0.001
+    absolute_tolerance: 0.00001
+    max_function_evaluations: 1000000
+  auxiliary_fixed_step_integrator:
+    method: midpoint
+    step_size: 1.0
+  diffusion_estimation:
+    method: public utility.diffusion_fit
+    integration_grid_step: 0.01
+    monte_carlo_samples_per_estimate: 100
+    replicates: 10
+    initial_updates_at_full_iterations: [100, 200, 300, 400]
+    periodic_checkpoint_estimates_every_iterations: 500
+  learning_rate_scheduler:
+    implementation: MultiStepLR with milestones [4600, 4800], gamma 0.5
+    effective_behavior: scheduler remains bound to the initial optimizer after stage-specific optimizers are recreated; actual stage optimizers retain the configured 0.003 learning rate
+  full_loss_definition:
+    source: external/DiffusionOT/utility.py::train_model and trans_loss
+    density_residual_multiplier: 10000
+    transport_component: time-integrated velocity, growth, diffusion-score and density terms from the public implementation
+  permissible_non_scientific_fix:
+    - detach gradient-bearing tensors only when serializing diagnostic histories
+    - run-state, logging, hashing, and file-I/O bookkeeping
+
+outputs:
+  save_all_seed_checkpoints_and_training_histories: true
+  latent_input_contains:
+    - latent_ae
+    - time_label
+    - type_label
+    - original_cell_id
+    - source_row_index
+  preserve_canonical_cell_order: true
+  derived_per_cell_fields:
+    - velocity
+    - growth
+    - score
+    - shared_diffusion_coefficient
+  additional_diffusion_fit_samples: true
+  output_row_order: canonical source row order with explicit RUOT row mapping sidecar
+
+identity_gate:
+  required_cells: 130887
+  required_unique_ids: 130887
+  allowed_duplicates: 0
+  allowed_missing_ids: 0
+  allowed_untracked_reordering: 0
+  required_chain: input_tensor_to_AE_to_RUOT_to_saved_output
+
+lineage_lock:
+  clone_assignment_and_fate_data_visible_during_training: false
+  no_lineage_assisted_seed_selection: true
+  no_best_seed_selection: true
+  no_lineage_metric_oracle_or_lineage_informed_baseline_before_admission: true
+
+terminal_taxonomy:
+  source_annotations_at_time_6:
+    - Monocyte
+    - Neutrophil
+    - Baso
+    - Meg
+    - Mast
+    - Erythroid
+    - Eos
+    - Lymphoid
+    - Ccr7_DC
+    - pDC
+    - Undifferentiated
+  canonical_mapping:
+    Baso: Basophil
+    Meg: Megakaryocyte
+    Eos: Eosinophil
+    Ccr7_DC: Other/Unresolved
+    pDC: Other/Unresolved
+    Undifferentiated: Undifferentiated/Unresolved progenitor state; not a terminal fate
+  day6_annotation_counts:
+    Monocyte: 10727
+    Neutrophil: 14448
+    Baso: 6721
+    Meg: 1367
+    Mast: 1965
+    Erythroid: 433
+    Eos: 351
+    Lymphoid: 130
+    Ccr7_DC: 84
+    pDC: 23
+    Undifferentiated: 17891
+  endpoint_categories:
+    - Monocyte
+    - Neutrophil
+    - Basophil
+    - Megakaryocyte
+    - Mast
+    - Erythroid
+    - Eosinophil
+    - Lymphoid
+    - Other/Unresolved
+    - Undifferentiated/Unresolved progenitor
+  terminal_fate_status:
+    Undifferentiated/Unresolved progenitor: retained as a separate endpoint state; excluded from claims about terminal fate
+  low_clone_support_action: classes below 20 distinct barcode-labelled day6 clones are pooled into Other/Unresolved by this predeclared rule; if that makes Other/Unresolved uninterpretable, affected multiclass endpoint is HOLD_METRIC_VALIDITY
+  minimum_terminal_cells_per_class: 100
+  minimum_barcode_labelled_day6_clones_per_primary_class: 20
+  rare_class_rule: combine predeclared rare annotations into Other/Unresolved; after census, any additional terminal category with fewer than 20 distinct labelled Day6 clones is pooled into Other/Unresolved; Undifferentiated remains a separate unresolved progenitor state and is never described as terminal fate
+
+terminal_classifier:
+  target: frozen Day6 endpoint cell-state categories
+  primary_model: multinomial logistic regression, C=1, lbfgs, max_iter=3000
+  sensitivity_models: []
+  features: paired-seed 2D latent state only; Day6 cells and non-lineage cell-type annotation labels only
+  preprocessing: StandardScaler fit inside each training fold
+  validation: 5-fold StratifiedGroupKFold grouped by Library, shuffle=true, seed=8103; fit separately within each seed
+  metrics: [pooled_out_of_fold_confusion_matrix, macro_F1, per_class_precision_recall_F1]
+  final_mapper: after grouped CV, refit the frozen multinomial logistic model on all Day6 cells for mapping STA endpoints to cell-state probabilities
+  output_probabilities: class probabilities in the frozen endpoint category order; retain Undifferentiated/Unresolved progenitor as a distinct state
+  required_status_before_unblinding: trained_on_non_lineage_annotations_and_frozen_before_any_lineage_read
+  lineage_features_used: false
+
+snapshot_qc:
+  adjacent_transitions: [[2, 4], [4, 6]]
+  primary_metric: debiased_sinkhorn_squared_euclidean
+  secondary_metric: gaussian_MMD
+  evaluation_cells_per_source_timepoint: 10000
+  evaluation_sampling: deterministic_without_replacement_stratified_by_cell_type_and_Library
+  nulls:
+    - identity_no_dynamics
+    - random_target_among_30_nearest_later_states
+  admission_rule: RUOT must improve both metrics over both nulls on at least 4 of 5 seeds, with median relative Sinkhorn improvement of at least 5% against identity
+  empirical_support_explosion_flag: more_than_5_percent_of_predicted_endpoints_exceed_99th_percentile_empirical_LOO_30NN_radius
+
+five_seed_stability:
+  reference_seed: 11
+  latent_alignment: orthogonal_similarity_Procrustes_on_matched_cell_IDs; transform vectors with the same fitted similarity transform
+  latent_metrics: [sampled_pairwise_distance_Spearman_rho, kNN_overlap_k30, aligned_Procrustes_RMSE]
+  velocity_metrics: [matched_cell_cosine_similarity, Spearman_rho_of_vector_norms]
+  growth_metrics: [Spearman_rho, ICC_2_1]
+  diffusion_metrics: report shared learned scalar d and diffusion_fit per-seed mean estimates at each saved checkpoint; cell-wise correlation is not estimable for a shared scalar
+  stable_thresholds:
+    median_velocity_cosine: 0.8
+    median_velocity_norm_Spearman: 0.8
+    median_growth_Spearman: 0.8
+    median_growth_ICC_2_1: 0.75
+    median_latent_distance_Spearman: 0.8
+    median_knn_overlap_k30: 0.5
+    diffusion_scalar_coefficient_of_variation_max: 0.25
+
+sta_monte_carlo:
+  fixed_non_lineage_audit_cells_per_timepoint: 100
+  cell_set_seed: 101
+  trajectories_per_cell_grid: [100, 300, 1000, 3000, 10000]
+  nested_random_stream: true
+  convergence_rule: for all audit cells, maximum absolute change in maximum predicted fate probability and normalized fate entropy must each be <0.01 between consecutive grid sizes
+  primary_trajectory_count: smallest_grid_value_passing_convergence
+  if_10000_fails: STA_MONTE_CARLO_UNSTABLE
+  endpoint_integration: official DiffusionOT forward SDE, Euler-Maruyama, dt=0.01, drift=RUOT velocity, Brownian scale=sqrt(2 * learned shared diffusion coefficient d)
+  endpoint_state_mapping: frozen seed-specific Day6 multinomial logistic cell-state classifier; save raw endpoint coordinates and class-probability vectors
+  convergence_summaries: maximum per-audit-cell change in largest category probability and normalized entropy; nested random stream; require both <0.01 for all fixed audit cells
+  fixed_audit_cell_selection: uniform_without_replacement_from_each_source_timepoint_using_numpy_seed_101_plus_timepoint
+  trajectory_rng: numpy_default_rng_seed_20260927_plus_model_seed_times_100000_plus_timepoint_times_1000_plus_cell_index
+
+primary_lineage_endpoints:
+  P1_clone_link:
+    score: empirical_endpoint_frequency_assigned_to_nearest_observed_late_cell
+    metric: AUPRC
+    pairings: [[2, 4], [2, 6], [4, 6]]
+    summary: unweighted_macro_mean_of_pairing_specific_AUPRC
+    uncertainty: 2000_clone_bootstrap_replicates_percentile_95_CI
+  P2_clone_fate_calibration:
+    metric: multiclass_Brier_score
+    prediction: mean_STA_endpoint_cell_state_vector_across_each_clone_early_cells_after_final_frozen_category_mapping
+    target: observed_Day6_descendant_cell_type_fractions_after_the_same_mapping
+    uncertainty: 2000_clone_bootstrap_replicates_percentile_95_CI
+  P3_stochasticity_calibration:
+    metric: Spearman_rho
+    estimand: predicted_vs_observed_clone_level_entropy_conditional_on_terminal_Day6_descendants
+    taxonomy: final_frozen_category_mapping_after_the_predeclared_rare_clone_support_merge; exclude_Undifferentiated_Unresolved_progenitor
+    prediction: sum_mapped_terminal_class_probabilities_then_renormalize_over_terminal_classes
+    target: observed_Day6_terminal_descendant_fractions_after_the_same_mapping
+    entropy: Shannon_entropy_normalized_by_log_number_of_final_terminal_categories
+    uncertainty: 2000_clone_bootstrap_replicates_percentile_95_CI
+  resampling_unit: clone
+  cell_level_naive_bootstrap: forbidden
+  TCM: raw_normalized_and_permutation_expectation_secondary_only
+
+lineage_nulls:
+  clone_label_permutation: 1000_within_timepoint_and_upstream_cell_type_strata
+  terminal_fate_frequency: fixed_observed_Day6_frequencies_for_all_early_cells
+  state_nearest_neighbor: Euclidean_distance_in_frozen_2D_latent_space
+  PCA_distance: Euclidean_distance_in_first_50_expression_PCs_fit_without_lineage_or_fate_targets
+  permutation_p_value: (1 + count(null >= observed)) / (1 + n_permutations) for higher-is-better scores; (1 + count(null <= observed)) / (1 + n_permutations) for lower-is-better losses such as Brier score
+
+state_only_oracle:
+  primary: multinomial_logistic_regression
+  sensitivity: [random_forest_1000_trees, xgboost_2.1.4_fixed_parameters]
+  fixed_parameters:
+    logistic: {C: 1.0, solver: lbfgs, max_iter: 3000}
+    random_forest: {n_estimators: 1000, max_features: sqrt, min_samples_leaf: 1, n_jobs: 4}
+    xgboost: {version: 2.1.4, objective: multi:softprob, n_estimators: 300, max_depth: 4, learning_rate: 0.05, subsample: 0.8, colsample_bytree: 0.8, reg_lambda: 1.0, tree_method: hist, eval_metric: mlogloss, n_jobs: 4}
+  folds: 5
+  split_unit: clone
+  features: same_timepoint_transcriptomic_state_only
+  training_target: Day6 clone-composition probability vector; fit multiclass models to soft clone-composition labels by class-expanded observations weighted by the corresponding clone fraction
+  aggregation: average held-out early-cell predicted probability vectors within clone before scoring
+  tuning: none
+  target: clone_derived_Day6_fate_composition; available only after unblinding
+  no_clone_id_as_feature: true
+  synthetic_tests_before_unblinding: [sparse_clone_link_matches_dense_average_precision, shared_clone_bootstrap_for_macro_P1, clone_bootstrap_resamples_clusters, paired_entropy_spearman_clone_bootstrap, probability_vectors_normalized, multiclass_brier_known_answer, entropy_known_answer, null_baselines_known_answer, permutation_plus_one_p_value, clone_group_leakage_absent, rare_category_probability_merge_and_terminal_entropy]
+
+clone_support_gate:
+  exact_alignment_minimum_fraction: 0.95
+  lineage_labelled_cell_coverage_minimum_overall: 0.80
+  lineage_labelled_cell_coverage_minimum_each_timepoint: 0.70
+  minimum_shared_clones_per_time_pairing: 100
+  minimum_mixed_fate_clones_with_Day6_descendants: 30
+  minimum_fate_restricted_clones_with_Day6_descendants: 30
+  minimum_clone_support_per_primary_fate: 20
+  low_overall_support_verdict: HOLD_LINEAGE_POWER
+
+non_lineage_qc_thresholds:
+  all_parameters_latents_velocities_growth_score_and_diffusion_finite: true
+  loss_histories_finite: true
+  diffusion:
+    zero_tolerance: 0.00000001
+    collapse: learned_shared_d_at_or_below_zero_tolerance_or_over_99_percent_of_diffusion_fit_estimates_at_or_below_zero_tolerance
+    explosive_support_threshold: more_than_5_percent_of_predicted_endpoints_exceed_the_empirical_leave_one_out_30NN_99th_percentile_radius
+  growth:
+    collapse: at_least_99.9_percent_of_cells_have_identical_growth_with_absolute_tolerance_0.000001_or_IQR_below_0.000001
+    extreme: nonfinite_or_99th_percentile_absolute_growth_at_least_80_because_growth_enters_exponentiated_density_terms
+    concentration_warning: top_1_percent_absolute_growth_mass_exceeds_50_percent_of_total_absolute_growth_mass
+  snapshot_metrics:
+    debiased_sinkhorn_squared_euclidean_regularization: 0.05_times_median_target_pairwise_squared_distance
+    sinkhorn_iterations: 500
+    mmd_kernel: gaussian
+    mmd_bandwidth: median_target_pairwise_euclidean_distance
+    distance_metric_evaluation_subsample: 2000_without_replacement_from_each_10000_endpoint_and_target_set_seed_6047
+    null_definition: identity_uses_early_sample_as_endpoint; random_matched_state_draws_uniformly_from_each_source_cell_30_nearest_later_cells; both use_the_same_source_sample_and_evaluation_seed
+  failed_seed_policy: retain_all_five; any unresolved numerical or model-validity failure blocks lineage unblinding
+
+lineage_support_gate:
+  exact_cell_id_alignment: at_least_95_percent_by_frozen_ID_map
+  labelled_cell_coverage: at_least_80_percent_overall_and_70_percent_at_each_timepoint
+  shared_clones: at_least_100_for_each_cross_time_pairing
+  fate_diversity: at_least_30_mixed_fate_and_30_fate_restricted_clones_with_Day6_descendants
+  per_primary_endpoint_fate_support: at_least_20_distinct_Day6_clones_per_category
+  failure_verdict: HOLD_LINEAGE_POWER
+
+bootstrap:
+  unit: clone
+  replicates: 2000
+  seed: 71
+
+multiple_testing:
+  primary_endpoints: no_joint_FDR_adjustment
+  secondary_subgroup_analyses: Benjamini_Hochberg
+
+pre_unblind_artifact:
+  path: manifests/PRE_UNBLINDING_MANIFEST.tsv
+  must_hash: [all_model_checkpoints, configs, metric_code, fate_taxonomy, terminal_classifier, nulls, oracle_specification, cell_ID_mappings, timestamps]
+  frozen_code_paths: [scripts/phase1r_reimplementation.py, scripts/phase1r_postprocess_seed.py, scripts/phase1r_id_integrity.py, scripts/phase1r_freeze_taxonomy_classifier.py, scripts/phase1r_snapshot_qc.py, scripts/phase1r_sta_mc.py, scripts/phase1r_stability_qc.py, scripts/phase1r_lineage_metrics.py, scripts/phase1r_finalize_registry.py, scripts/phase1r_update_manifest.py, scripts/phase1r_admission_report.py, scripts/phase1r_code_freeze_receipt.py, scripts/phase1r_build_preunblind_manifest.py, scripts/phase1g_lineage_census.py, tests/test_phase1r_lineage_metrics_synthetic.py]
+protocol_amendments:
+  - timestamp_local: "2026-09-27T21:30:07+08:00"
+    scope: apply the same predeclared rare-category mapping to P2/P3 targets, probabilities and census fate-diversity summaries; define P3 entropy explicitly before lineage unblinding
+    reason: clone support, mixed/restricted status and terminal entropy must use the mapped taxonomy; P3 excludes the separately retained unresolved progenitor state and normalizes both predicted and observed terminal compositions consistently
+    scientific_training_changed: false
+    endpoint_or_threshold_changed: false
+
+software:
+  python: 3.10.20
+  torch: 1.13.1
+  numpy: 1.26.4
+  scipy: 1.10.1
+  scanpy: 1.11.2
+  anndata: 0.11.4
+  pandas: 1.5.3
+  scikit_learn: 1.2.2
+  torchdiffeq: 0.2.3
+  oracle_xgboost: 2.1.4
+  oracle_POT: 0.9.5
+  oracle_environment_is_separate_from_training_environment: true
+  oracle_environment_path: .venv_phase1r_analysis
+
+lineage_unblinding_authorization:
+  allowed_only_after: [5_of_5_model_completion, CELL_ID_INTEGRITY_PASS, no_lineage_leakage, acceptable_numerical_QC, nondegenerate_model_dynamics, primary_protocol_frozen]
+  if_model_verdict_not_GO: do_not_open_lineage_locked_data
+  after_unblinding: ground_truth_census_then_support_gate_then_P1_P2_P3_if_supported
+  phase2_authorization_required: true

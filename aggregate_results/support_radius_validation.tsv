@@ -1,0 +1,14 @@
+case	n_targets	n_endpoints	radius99	median_nearest_distance	out_of_support_fraction	expected	pass
+A_target_self	4800	4800	0.8618451860206022	0.0	0.0	approximately 0%	True
+B_heldout_same_distribution	4800	1200	0.8618451860206022	0.02538096966872211	0.0	reasonable low fraction; <=10% diagnostic bound	True
+C_far_synthetic_cloud	4800	1200	0.8618451860206022	38.96629737911417	1.0	approximately 100%	True
+frozen_phase1r_seed11_2_to_4	48498	10000	0.12625288594116266	0.004098371947302327	0.0388	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed11_4_to_6	54140	10000	0.1299733981877577	0.0071988475340216485	0.1895	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed23_2_to_4	48498	10000	0.14767617169006253	0.0024000084725491495	0.0107	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed23_4_to_6	54140	10000	0.16922821353016088	0.005841368731560461	0.1056	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed47_2_to_4	48498	10000	0.133506163334594	0.002790275048827822	0.0113	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed47_4_to_6	54140	10000	0.15819815675459944	0.007315554316415809	0.1212	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed71_2_to_4	48498	10000	0.18277767495709124	0.0026889938087590257	0.0064	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed71_4_to_6	54140	10000	0.2065616993304518	0.009441659818955232	0.1553	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed101_2_to_4	48498	10000	0.15048867862370408	0.004703998778859039	0.0429	reproduces frozen Phase 1R snapshot gate	True
+frozen_phase1r_seed101_4_to_6	54140	10000	0.1270610431799659	0.007465125910010594	0.1308	reproduces frozen Phase 1R snapshot gate	True

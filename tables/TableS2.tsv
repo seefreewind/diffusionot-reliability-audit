@@ -1,0 +1,9 @@
+Metric	11	23	47	71	101
+Pairwise-distance Spearman	1.000	0.677	0.709	0.664	0.528
+k=30 neighborhood overlap	1.000	0.000	0.000	0.000	0.000
+Procrustes RMSE	0.000	0.677	0.641	0.643	0.674
+Velocity cosine vs seed 11	1.000	0.190	0.196	0.930	0.760
+Velocity-norm Spearman	1.000	0.718	0.497	0.788	0.696
+Growth Spearman vs seed 11	1.000	0.414	0.493	0.053	0.283
+Diffusion d (native)	0.0010223	0.0012571	0.0011290	0.0040640	0.0022350
+Growth ICC(2,1)	0.472	0.472	0.472	0.472	0.472

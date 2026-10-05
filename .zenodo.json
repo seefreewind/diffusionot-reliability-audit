@@ -1,0 +1,47 @@
+{
+  "title": "DiffusionOT reliability audit: frozen aggregate data and reproducible figures",
+  "upload_type": "software",
+  "description": "Author-written code and frozen non-lineage aggregate results for a pre-lineage reliability audit of stochastic optimal transport. Contains four figure generators, source tables, main and supplementary tables, non-lineage computational scripts and frozen configurations. No cell-level lineage assignments, raw expression, checkpoints or direct lineage accuracy results are included. Code is MIT; aggregate data and figure assets are CC BY 4.0.",
+  "creators": [
+    {
+      "name": "Xu, Sisi",
+      "affiliation": "The First Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China"
+    },
+    {
+      "name": "Zhang, Yu",
+      "affiliation": "The Second Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China"
+    },
+    {
+      "name": "Zeng, Tiantian",
+      "affiliation": "The First Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China"
+    },
+    {
+      "name": "Liu, Jiechen",
+      "affiliation": "The First Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China"
+    },
+    {
+      "name": "Qiu, Ling",
+      "affiliation": "The First Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China",
+      "orcid": "0009-0007-3662-5124"
+    }
+  ],
+  "license": "mit",
+  "keywords": [
+    "single-cell dynamics",
+    "stochastic optimal transport",
+    "reproducibility",
+    "reliability audit"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/seefreewind/diffusionot-reliability-audit",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.1126/science.aaw3381",
+      "relation": "references",
+      "scheme": "doi"
+    }
+  ]
+}

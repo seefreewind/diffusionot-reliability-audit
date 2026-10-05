@@ -1,0 +1,26 @@
+panel	metric	value	seed	replicate
+A	Pooled within-model Monte Carlo	2.4791518171696225e-07		
+A	Between-seed model component	0.0165695585310459		
+B	velocity_cosine_vs_seed11	0.1899151130021282	23.0	
+C	growth_spearman_vs_seed11	0.4144289487192369	23.0	
+B	velocity_cosine_vs_seed11	0.1957452715714408	47.0	
+C	growth_spearman_vs_seed11	0.4932922952049728	47.0	
+B	velocity_cosine_vs_seed11	0.929764976409847	71.0	
+C	growth_spearman_vs_seed11	0.0533187291236098	71.0	
+B	velocity_cosine_vs_seed11	0.7597125646628036	101.0	
+C	growth_spearman_vs_seed11	0.2827366465872655	101.0	
+D	initial_run_converged	1.0	11.0	1
+D	initial_run_converged	1.0	11.0	2
+D	initial_run_converged	1.0	11.0	3
+D	initial_run_converged	1.0	23.0	1
+D	initial_run_converged	1.0	23.0	2
+D	initial_run_converged	1.0	23.0	3
+D	initial_run_converged	1.0	47.0	1
+D	initial_run_converged	1.0	47.0	2
+D	initial_run_converged	1.0	47.0	3
+D	initial_run_converged	0.0	71.0	1
+D	initial_run_converged	1.0	71.0	2
+D	initial_run_converged	1.0	71.0	3
+D	initial_run_converged	0.0	101.0	1
+D	initial_run_converged	0.0	101.0	2
+D	initial_run_converged	0.0	101.0	3

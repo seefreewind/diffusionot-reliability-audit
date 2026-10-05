@@ -1,0 +1,15 @@
+Domain	Reporting item	Status	Evidence / gap
+Design	State the prediction target and intended use	PASS	Target is terminal taxonomy; it is not lineage or clone prediction and is not presented as a deployed model.
+Design	Define validation split and grouping unit	PARTIAL	Grouped out-of-fold evaluation is reported; exact fold construction and group variable must be carried into the code archive and confirmed from the frozen classifier configuration.
+Design	Separate technical seeds from biological replicates	PASS	Five model seeds are identified as computational seeds, not biological replicate count.
+Data	Report data origin and cohort scope	PASS	LARRY in-vitro cohort, GEO GSE140802, 130,887 cells, 25,289 genes, days 2/4/6.
+Data	Report inclusion/exclusion and preprocessing	PARTIAL	Frozen representation and IDs are described; full preprocessing history must be accessible in the public release.
+Data	Keep lineage outcome independent from classifier target	PASS	Terminal taxonomy classifier; direct lineage outcomes were not evaluated.
+Optimization	Report all model selection/tuning steps	PARTIAL	No new tuning occurred in this audit; exact frozen classifier hyperparameters are not reproduced in the current handoff and must be exposed with release materials.
+Optimization	Explain threshold/selection choices	PARTIAL	No new threshold selection; classifier configuration must be linked to the frozen report/code in the release.
+Model	Identify model family, version and implementation	PARTIAL	Classifier is frozen; architecture/configuration details need author verification from the archived run artifacts.
+Model	State feature processing and transformations	PARTIAL	The paired seed’s two-dimensional latent_ae representation is described; exact classifier input preprocessing should be confirmed.
+Evaluation	Report metrics and class-level reliability	PASS	Grouped OOF macro-F1 range 0.478–0.578; 19 seed-by-class results below F1=0.30 across five named classes.
+Evaluation	Compare against baselines or external test set	NOT APPLICABLE / NOT RUN	This auxiliary classifier is not used for comparative performance claims; no independent external classifier test is reported.
+Evaluation	Evaluate lineage accuracy	NOT RUN	Cell-level lineage assignments and direct outcomes were not opened; no lineage metric exists.
+Evaluation	Make predictions, code and environment reproducible	BLOCKED	No public repository/DOI or release license is available yet.

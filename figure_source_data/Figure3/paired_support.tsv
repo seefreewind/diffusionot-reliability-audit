@@ -1,0 +1,11 @@
+seed	mode	out_of_support_percent
+11	full SDE	18.94
+11	drift-only (d=0)	19.13
+23	full SDE	10.57
+23	drift-only (d=0)	10.65
+47	full SDE	12.12
+47	drift-only (d=0)	11.55
+71	full SDE	15.54
+71	drift-only (d=0)	15.22
+101	full SDE	13.02
+101	drift-only (d=0)	12.57

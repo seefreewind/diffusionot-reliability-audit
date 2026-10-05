@@ -1,0 +1,6 @@
+Domain	Criterion	Evidence	Decision
+Artifact identity	Deterministic cell-ID mapping	Unavailable for 43,968 published rows	Clone-level validation unavailable
+Early target support	≤5% out of support	2→4: 5/5 seeds pass	Criterion met
+Late target support	≤5% out of support	4→6: 0/5 seeds pass	Admission prerequisite unmet
+Pipeline stability	Cross-seed dynamics + STA stability	Between-fit variation ≫ within-fit MC variation	Stability concern retained
+Direct lineage outcome	External validation after admission	Not evaluated	Accuracy unknown

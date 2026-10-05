@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite this versioned software and aggregate-data release."
+title: "DiffusionOT reliability audit: frozen aggregate data and reproducible figures"
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/seefreewind/diffusionot-reliability-audit"
+authors:
+  - family-names: Xu
+    given-names: Sisi
+  - family-names: Zhang
+    given-names: Yu
+  - family-names: Zeng
+    given-names: Tiantian
+  - family-names: Liu
+    given-names: Jiechen
+  - family-names: Qiu
+    given-names: Ling
+    orcid: "https://orcid.org/0009-0007-3662-5124"
